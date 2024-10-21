@@ -2,9 +2,14 @@ package enset.ali.sqrseventsourcing.commands.aggregates;
 
 import enset.ali.sqrseventsourcing.commonApi.commands.CreateAccountCommand;
 import enset.ali.sqrseventsourcing.commonApi.enums.AccountStatus;
+import enset.ali.sqrseventsourcing.commonApi.events.AccountCreatedEvent;
 import org.axonframework.commandhandling.CommandHandler;
+import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
+import org.axonframework.modelling.command.AggregateLifecycle;
+import org.axonframework.spring.stereotype.Aggregate;
 
+@Aggregate
 public class AccountAggregate {
     @AggregateIdentifier
     private String AccountId;
@@ -21,5 +26,19 @@ public class AccountAggregate {
         if(createAccountCommand.getAccountBalance() < 0) {
             throw new IllegalArgumentException("Initial balance cannot be less than 0");
         }
+
+        AggregateLifecycle.apply(new AccountCreatedEvent(
+                createAccountCommand.getId(),
+                createAccountCommand.getAccountBalance(),
+                createAccountCommand.getCurrency()
+        ));
+    }
+
+    @EventSourcingHandler
+    public void on(AccountCreatedEvent accountCreatedEvent) {
+        this.AccountId = accountCreatedEvent.getId();
+        this.accountBalance = accountCreatedEvent.getInitialBalance();
+        this.currency = accountCreatedEvent.getCurrency();
+        this.status = AccountStatus.CREATED;
     }
 }
