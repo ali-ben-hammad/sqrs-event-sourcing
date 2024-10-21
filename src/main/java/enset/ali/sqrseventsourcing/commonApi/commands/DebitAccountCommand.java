@@ -1,8 +1,10 @@
 package enset.ali.sqrseventsourcing.commonApi.commands;
 
+import lombok.Getter;
+
 public class DebitAccountCommand extends BaseCommand<String> {
-    public final double debitAmount;
-    public final String currency;
+    @Getter private double debitAmount;
+    @Getter private String currency;
 
     public DebitAccountCommand(String id, double debitAmount, String currency) {
         super(id);

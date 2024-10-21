@@ -1,8 +1,10 @@
 package enset.ali.sqrseventsourcing.commonApi.commands;
 
+import lombok.Getter;
+
 public class CreditAccountCommand extends BaseCommand<String> {
-    public final double creditAmount;
-    public final String currency;
+    @Getter private double creditAmount;
+    @Getter private String currency;
 
     public CreditAccountCommand(String id, double creditAmount, String currency) {
         super(id);

@@ -1,4 +1,4 @@
 package enset.ali.sqrseventsourcing.commonApi.events;
 
-public class BaseEvent {
+public abstract class BaseEvent {
 }
